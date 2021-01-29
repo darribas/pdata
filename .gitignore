@@ -1,0 +1,7 @@
+*.db
+/dbs
+/auths
+*.json
+auths/*.json
+*.swp
+*/*.swp
