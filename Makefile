@@ -27,6 +27,14 @@ pocket:
 			   pocket-to-sqlite fetch \
 			   		--auth /mnt/auths/pocket_auth.json \
 					/mnt/dbs/pocket.db
+twitter_ingest:
+	docker run -ti \
+			   --rm \
+			   -v ${PWD}:/mnt \
+			   dogsheep \
+			   twitter-to-sqlite import \
+			   /mnt/dbs/twitter_archive.db \
+			   /mnt/twitter-2021-02-01-c361de3cedd9786e46ea8b2cd09690f988e3b22f6ffafba1424684360501883b/data
 twitter:
 	# Tweets
 	docker run -ti \
