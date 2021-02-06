@@ -27,7 +27,9 @@ pocket:
 			   pocket-to-sqlite fetch \
 			   		--auth /mnt/auths/pocket_auth.json \
 					/mnt/dbs/pocket.db
-twitter_ingest:
+### Twitter ###
+twitter: tw_tweets tw_followers tw_friends tw_favorites tw_lists
+tw_ingest:
 	docker run -ti \
 			   --rm \
 			   -v ${PWD}:/mnt \
@@ -35,8 +37,7 @@ twitter_ingest:
 			   twitter-to-sqlite import \
 			   /mnt/dbs/twitter_archive.db \
 			   /mnt/twitter-2021-02-01-c361de3cedd9786e46ea8b2cd09690f988e3b22f6ffafba1424684360501883b/data
-twitter:
-	# Tweets
+tw_tweets:
 	docker run -ti \
 			   --rm \
 			   -v ${PWD}:/mnt \
@@ -45,7 +46,7 @@ twitter:
 			   		--since \
 			   		--auth /mnt/auths/twitter_auth.json \
 			   		/mnt/dbs/twitter.db
-	# Followers
+tw_followers:
 	docker run -ti \
 			   --rm \
 			   -v ${PWD}:/mnt \
@@ -53,8 +54,28 @@ twitter:
 			   twitter-to-sqlite followers \
 			   		--auth /mnt/auths/twitter_auth.json \
 			   		/mnt/dbs/twitter.db
-	# Followers
-	# Friends
-	# Favorited tweets
-	# Lists
-	#
+tw_friends:
+	docker run -ti \
+			   --rm \
+			   -v ${PWD}:/mnt \
+			   dogsheep \
+			   twitter_to_sqlite friends \
+			   		--auth /mnt/auths/twitter_auth.json \
+			   		/mnt/dbs/twitter.db
+tw_favorites:
+	docker run -ti \
+			   --rm \
+			   -v ${PWD}:/mnt \
+			   dogsheep \
+			   twitter_to_sqlite favorites \
+			   		--auth /mnt/auths/twitter_auth.json \
+			   		/mnt/dbs/twitter_favorites.db
+tw_lists:
+	docker run -ti \
+			   --rm \
+			   -v ${PWD}:/mnt \
+			   dogsheep \
+			   twitter_to_sqlite lists \
+			   		--auth /mnt/auths/twitter_auth.json \
+			   		/mnt/dbs/twitter_lists.db --members darribas
+
