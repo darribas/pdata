@@ -1,6 +1,7 @@
 DOGSHEEP = 	docker run \
 				-ti \
 			    --rm \
+				-p 8001:8001 \
 			    -v ${PWD}:/mnt \
 			    dogsheep 
 container:
