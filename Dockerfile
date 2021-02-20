@@ -1,5 +1,9 @@
 FROM datasetteproject/datasette:0.54
 
+RUN apt update \
+ && apt install -y git \
+ && apt clean
+
 RUN pip install \
           datasette-leaflet-geojson \
           datasette-render-timestamps \
