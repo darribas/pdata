@@ -58,8 +58,9 @@ tw_lists:
 			   		/mnt/dbs/twitter_lists.db --members darribas
 
 ### Github ###
-gh_repos:
+gh_db:
 	$(DOGSHEEP) github-to-sqlite repos \
 			   		--readme --readme-html \
 			   		-a /mnt/auths/github_auth.json \
 			   		/mnt/dbs/github.db
+
