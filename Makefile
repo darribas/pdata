@@ -3,6 +3,7 @@ DOGSHEEP = 	docker run \
 			    --rm \
 				-p 8001:8001 \
 			    -v ${PWD}:/mnt \
+                -v $(data_folder):/data \
 			    dogsheep 
 container:
 	docker build -t dogsheep .
@@ -63,4 +64,9 @@ gh_db:
 			   		--readme --readme-html \
 			   		-a /mnt/auths/github_auth.json \
 			   		/mnt/dbs/github.db
-
+gh_clone_fetch:
+	$(DOGSHEEP) python /mnt/gh/mirror.py \
+                    --verbose \
+                    /mnt/dbs/github.db \
+                    /data/ \
+                    /mnt/auths/github_auth.json
