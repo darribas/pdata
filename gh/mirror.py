@@ -25,7 +25,8 @@ def get_repo_list(db_path):
     db = sqlite_utils.Database(db_path)
     repo_list = []
     for row in db.table("repos").rows:
-        repo_list.append(row["html_url"]+".git")
+        if not row["private"]:
+            repo_list.append(row["html_url"]+".git")
     return repo_list
 
 def clone_update_repo(git_url, folder_p, verbose=False):
@@ -105,7 +106,7 @@ def clone_update_repo(git_url, folder_p, verbose=False):
     "--log-mode",
     type=click.Path(file_okay=True, dir_okay=False, allow_dash=False),
     default=None,
-    help="Path to write out log file",
+    help="Mode to write out log file (default=`w`)",
 )
 @click.option(
     "-v",
@@ -134,14 +135,14 @@ def run_update(
             log = f"{datetime.now()}\t| Downloading/updating Github DB..."
             print(log)
         out = subprocess.run(
-            ["github-to-sqlite", "repos", "--readme", "--readme-html", github_token, db_path]
+            ["github-to-sqlite", "repos", "--readme", "--readme-html", "-a", github_token, db_path]
         )
     repo_urls = get_repo_list(db_path)
     if verbose:
         log = f"{datetime.now()}\t| Repo URLs extracted"
         print(log)
     for repo in repo_urls:
-        log = clone_update_repo(git_url, folder_p)
+        log = clone_update_repo(repo, folder_p, verbose=verbose)
     return None
 
 if __name__ == '__main__':
