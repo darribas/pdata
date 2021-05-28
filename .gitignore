@@ -7,3 +7,5 @@ auths/*.json
 */*.swp
 *.zip
 */*.zip
+.ipynb_checkpoints
+*/.ipynb_checkpoints
