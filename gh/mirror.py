@@ -141,7 +141,7 @@ def run_update(
     if verbose:
         log = f"{datetime.now()}\t| Repo URLs extracted"
         print(log)
-    for repo in repo_urls[:3]:
+    for repo in repo_urls:
         repo = repo.replace(
             "https://", f"https://darribas:{token}@"
         )
