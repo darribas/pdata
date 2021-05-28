@@ -3,7 +3,7 @@ Create and update an archive of Github repositories
 """
 
 import os
-import git
+import json
 import click
 from datetime import datetime
 import subprocess
@@ -25,8 +25,7 @@ def get_repo_list(db_path):
     db = sqlite_utils.Database(db_path)
     repo_list = []
     for row in db.table("repos").rows:
-        if not row["private"]:
-            repo_list.append(row["html_url"]+".git")
+        repo_list.append(row["html_url"]+".git")
     return repo_list
 
 def clone_update_repo(git_url, folder_p, verbose=False):
@@ -47,11 +46,12 @@ def clone_update_repo(git_url, folder_p, verbose=False):
     log : str
           Log message of action
     """
+    safe_git_url = "https://"+git_url.split("@")[-1]
     owner = git_url.split("/")[-2]
     repo_name = git_url.split("/")[-1].replace(".git", "")
     name = os.path.join(owner, repo_name)
     repo_folder = os.path.join(folder_p, name)
-    log = f"{datetime.now()}\t| Working on {git_url}\n"
+    log = f"{datetime.now()}\t| Working on {safe_git_url}\n"
     # Update
     if os.path.exists(repo_folder):
         wd = os.getcwd()
@@ -72,7 +72,7 @@ def clone_update_repo(git_url, folder_p, verbose=False):
             text=True        
         )
         log += f"\t{out.stdout}\n\t{out.stderr}\n"
-        log += f"{datetime.now()}\t| Cloned {git_url} into {repo_folder}\n"
+        log += f"{datetime.now()}\t| Cloned {safe_git_url} into {repo_folder}\n"
     if verbose:
         print(log)
     return log
@@ -86,13 +86,10 @@ def clone_update_repo(git_url, folder_p, verbose=False):
         "folder_p",
         required=True
 )
-@click.option(
-    "-t",
-    "--github_token",
+@click.argument(
+    "github_token",
     type=click.Path(file_okay=True, dir_okay=False, allow_dash=False),
-    default=None,
-    help=("Path to JSON file with Github token. "\
-          "If not provided, `db_path` is not updated"),
+    required=True,
 )
 @click.option(
     "-l",
@@ -115,7 +112,7 @@ def clone_update_repo(git_url, folder_p, verbose=False):
     help="Print out logs",
 )
 def run_update(
-    db_path, folder_p, github_token=None, log_file=None, log_mode="w", verbose=False
+    db_path, folder_p, github_token, log_file=None, log_mode="w", verbose=False
 ):
     """
     Clone/update a list of repositories whose URLs are stored in a DB
@@ -129,19 +126,25 @@ def run_update(
     DB_PATH : path to the SQLITE database with Github information
     
     FOLDER_P : local folder for the repo mirrors
+    
+    GITHUB_TOKEN : path to the JSON file with Github personal token
     """
-    if github_token:
-        if verbose:
-            log = f"{datetime.now()}\t| Downloading/updating Github DB..."
-            print(log)
-        out = subprocess.run(
-            ["github-to-sqlite", "repos", "--readme", "--readme-html", "-a", github_token, db_path]
+    if verbose:
+        log = f"{datetime.now()}\t| Downloading/updating Github DB..."
+        print(log)
+    out = subprocess.run(
+        ["github-to-sqlite", "repos", "--readme", "--readme-html", "-a", github_token, db_path]
         )
     repo_urls = get_repo_list(db_path)
+    with open(github_token) as f:
+        token = json.load(f)["github_personal_token"]
     if verbose:
         log = f"{datetime.now()}\t| Repo URLs extracted"
         print(log)
-    for repo in repo_urls:
+    for repo in repo_urls[:3]:
+        repo = repo.replace(
+            "https://", f"https://darribas:{token}@"
+        )
         log = clone_update_repo(repo, folder_p, verbose=verbose)
     return None
 
