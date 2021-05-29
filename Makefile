@@ -67,6 +67,7 @@ gh_db:
 gh_clone_fetch:
 	$(DOGSHEEP) python /mnt/gh/mirror.py \
                     --verbose \
-                    /mnt/dbs/github.db \
+                    --log_file /data/last_mirror.log \
+                    /data/github.db \
                     /data/ \
                     /mnt/auths/github_auth.json
