@@ -170,7 +170,7 @@ def run_update(
             "https://", f"https://darribas:{token}@"
         )
         log = clone_update_repo(
-            repo, folder_p, verbose=verbose, log_file=log_file, log_mode=log_mode
+            repo, folder_p, verbose=verbose, log_file=log_file, log_mode="a"
         )
     return None
 
