@@ -1,5 +1,4 @@
 #!/bin/bash
-rm /home/dani/twitter/last_mirror.log
 echo "Start of backup: $(date)" > /home/dani/twitter/last_mirror.log
 # Tweets
 docker run --rm \
@@ -9,7 +8,7 @@ docker run --rm \
 	   --since \
 	   --auth /mnt/auths/twitter_auth.json \
 	   /data/twitter.db
-echo "$(date) | Tweets updated" > /home/dani/twitter/last_mirror.log
+echo "$(date) | Tweets updated" >> /home/dani/twitter/last_mirror.log
 # Followers
 docker run --rm \
 	   -v /home/dani/code/pdata:/mnt \
@@ -17,7 +16,7 @@ docker run --rm \
 	   twitter-to-sqlite followers \
 	   --auth /mnt/auths/twitter_auth.json \
 	   /data/twitter.db
-echo "$(date) | Followers updated" > /home/dani/twitter/last_mirror.log
+echo "$(date) | Followers updated" >> /home/dani/twitter/last_mirror.log
 # Friends
 docker run --rm \
 	   -v /home/dani/code/pdata:/mnt \
@@ -25,7 +24,7 @@ docker run --rm \
 	   twitter-to-sqlite friends \
 	   --auth /mnt/auths/twitter_auth.json \
 	   /data/twitter.db
-echo "$(date) | Friends updated" > /home/dani/twitter/last_mirror.log
+echo "$(date) | Friends updated" >> /home/dani/twitter/last_mirror.log
 # Favorites
 docker run --rm \
 	   -v /home/dani/code/pdata:/mnt \
@@ -33,7 +32,7 @@ docker run --rm \
 	   twitter-to-sqlite favorites \
 	   --auth /mnt/auths/twitter_auth.json \
 	   /data/twitter.db
-echo "$(date) | Favorites updated" > /home/dani/twitter/last_mirror.log
+echo "$(date) | Favorites updated" >> /home/dani/twitter/last_mirror.log
 # Lists
 docker run --rm \
 	   -v /home/dani/code/pdata:/mnt \
@@ -42,6 +41,6 @@ docker run --rm \
 	   --auth /mnt/auths/twitter_auth.json \
 	   /data/twitter.db \
 	   --members darribas
-echo "$(date) | Lists updated" > /home/dani/twitter/last_mirror.log
+echo "$(date) | Lists updated" >> /home/dani/twitter/last_mirror.log
 
-echo "Completed: $(date)" > /home/dani/twitter/last_mirror.log
+echo "Completed: $(date)" >> /home/dani/twitter/last_mirror.log
