@@ -46,15 +46,15 @@ tw_followers:
 			   		--auth /mnt/auths/twitter_auth.json \
 			   		/mnt/dbs/twitter.db
 tw_friends:
-	$(DOGSHEEP) twitter_to_sqlite friends \
+	$(DOGSHEEP) twitter-to-sqlite friends \
 			   		--auth /mnt/auths/twitter_auth.json \
 			   		/mnt/dbs/twitter.db
 tw_favorites:
-	$(DOGSHEEP) twitter_to_sqlite favorites \
+	$(DOGSHEEP) twitter-to-sqlite favorites \
 			   		--auth /mnt/auths/twitter_auth.json \
 			   		/mnt/dbs/twitter_favorites.db
 tw_lists:
-	$(DOGSHEEP) twitter_to_sqlite lists \
+	$(DOGSHEEP) twitter-to-sqlite lists \
 			   		--auth /mnt/auths/twitter_auth.json \
 			   		/mnt/dbs/twitter_lists.db --members darribas
 
